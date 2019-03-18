@@ -1,0 +1,66 @@
+﻿<UserControl x:Class="SimpleApp.Views.ManufacturerTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SimpleApp.Views"
+             xmlns:infr="clr-namespace:SimpleApp.Infrastructure"
+             xmlns:design="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:ctrl="clr-namespace:SimpleApp.Views.Controls"
+             mc:Ignorable="d" 
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+             TextElement.FontWeight="Regular"
+             TextElement.FontSize="13"
+             TextOptions.TextFormattingMode="Ideal" 
+             TextOptions.TextRenderingMode="Auto"
+             Background="{DynamicResource MaterialDesignPaper}"
+             FontFamily="{StaticResource MaterialDesignFont}"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <infr:ViewModelLocator/>
+    </UserControl.DataContext>
+    <DockPanel DataContext="{Binding ManufacturerTabViewModel}">
+        <ctrl:TabToolbar DockPanel.Dock="Top"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <ListBox SelectedItem="{Binding SelectedObj}" ItemsSource="{Binding Objects}">
+                <ListBox.ItemContainerStyle>
+                    <Style BasedOn="{StaticResource MaterialDesignListBoxItem}" TargetType="ListBoxItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <DockPanel>
+                            <Button Content="Delete" Background="Red" DockPanel.Dock="Right" Margin="10"
+                                    Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext.DeleteCommand}"
+                                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}, Path=Content}"/>
+                            <TextBlock Text="{Binding ManufacturerName}" DockPanel.Dock="Left" VerticalAlignment="Center"/>
+                        </DockPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <StackPanel Grid.Column="1" DataContext="{Binding SelectedObj}">
+                <TextBox
+                    design:HintAssist.Hint="Manufacturer Id"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                    Margin="0 20 0 20"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    IsReadOnly="True"
+                    Text="{Binding ManufacturerId}"/>
+                <TextBox
+                    design:HintAssist.Hint="Manufacturer Name"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                    Width="200"
+                    Margin="15 5 0 5"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Text="{Binding ManufacturerName}"/>
+            </StackPanel>
+        </Grid>
+    </DockPanel>
+</UserControl>

@@ -1,0 +1,112 @@
+﻿<Window x:Class="SimpleApp.Views.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:infr="clr-namespace:SimpleApp.Infrastructure"
+        xmlns:design="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:tab="http://dragablz.net/winfx/xaml/dragablz"
+        xmlns:view="clr-namespace:SimpleApp.Views"
+        xmlns:ns="http://schemas.microsoft.com/expression/2010/interactions"
+        xmlns:int="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:controls="clr-namespace:SimpleApp.Views.Controls"
+        mc:Ignorable="d"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{StaticResource MaterialDesignFont}"
+        Title="ShopAdo" Height="450" Width="800"
+        WindowStyle="None" WindowState="{Binding MainViewModel.Settings.WindowState}"
+        ResizeMode="NoResize">
+    <Window.DataContext>
+        <infr:ViewModelLocator/>
+    </Window.DataContext>
+    <int:Interaction.Triggers>
+        <int:EventTrigger EventName="MouseDown">
+            <ns:CallMethodAction TargetObject="{Binding MainViewModel.Settings}" MethodName="DragWindow"/>
+        </int:EventTrigger>
+        <int:EventTrigger EventName="Closed">
+            <int:InvokeCommandAction Command="{Binding MainViewModel.ClosingCommand}"/>
+        </int:EventTrigger>
+    </int:Interaction.Triggers>
+    <Window.InputBindings>
+        <KeyBinding Key="Esc" Command="{Binding MainViewModel.CloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"/>
+        <KeyBinding Key="Return" Modifiers="Alt" Command="{Binding MainViewModel.FullScreenCommand}"/>
+    </Window.InputBindings>
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type view:GoodTabView}"/>
+    </Window.Resources>
+    <Grid>
+        <UserControl Content="{Binding MainViewModel.CurrentView}"/>
+        <ToggleButton
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Margin="0 5 220 0"
+            Style="{StaticResource MaterialDesignActionToggleButton}"
+            ToolTip="Sell/Edit"
+            Background="DarkSlateGray"
+            IsChecked="{Binding MainViewModel.IsSale, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <ToggleButton.Content>
+                <design:PackIcon
+                    Kind="Shop"/>
+            </ToggleButton.Content>
+            <design:ToggleButtonAssist.OnContent>
+                <design:PackIcon
+                    Kind="Edit"/>
+            </design:ToggleButtonAssist.OnContent>
+        </ToggleButton>
+        <TextBox
+            CaretBrush="WhiteSmoke"
+            Foreground="WhiteSmoke"
+            design:HintAssist.Hint="Data Source"
+            Text="{Binding MainViewModel.Settings.DataSource}"
+            Width="150"
+            Margin="0 10 50 10"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"/>
+        <design:PopupBox
+            DataContext="{Binding MainViewModel}"
+            StaysOpen="True"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Margin="0 10 10 0">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <ToggleButton
+                        Style="{StaticResource MaterialDesignActionToggleButton}"
+                        Margin="10"
+                        ToolTip="FullScreen"
+                        IsChecked="{Binding Settings.IsFullScreen}">
+                        <ToggleButton.Content>
+                            <design:PackIcon
+                                Kind="Fullscreen"/>
+                        </ToggleButton.Content>
+                        <design:ToggleButtonAssist.OnContent>
+                            <design:PackIcon
+                                Kind="FullscreenExit"/>
+                        </design:ToggleButtonAssist.OnContent>
+                    </ToggleButton>
+                    <ToggleButton
+                        Style="{StaticResource MaterialDesignActionToggleButton}"
+                        Margin="10"
+                        ToolTip="Dark Theme"
+                        IsChecked="{Binding Settings.IsDarkTheme}">
+                        <ToggleButton.Content>
+                            <design:PackIcon
+                                Kind="NightSky"/>
+                        </ToggleButton.Content>
+                        <design:ToggleButtonAssist.OnContent>
+                            <design:PackIcon
+                                Kind="WhiteBalanceSunny"/>
+                        </design:ToggleButtonAssist.OnContent>
+                    </ToggleButton>
+                </StackPanel>
+                <Separator Margin="5"/>
+                <Button Content="Exit" Command="{Binding CloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"/>
+            </StackPanel>
+        </design:PopupBox>
+    </Grid>
+</Window>

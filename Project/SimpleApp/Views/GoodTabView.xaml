@@ -1,0 +1,118 @@
+﻿<UserControl xmlns:views="clr-namespace:SimpleApp.Views"
+             x:Class="SimpleApp.Views.GoodTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:design="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:infr="clr-namespace:SimpleApp.Infrastructure"
+             xmlns:ctrl="clr-namespace:SimpleApp.Views.Controls"
+             mc:Ignorable="d"
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+             TextElement.FontWeight="Regular"
+             TextElement.FontSize="13"
+             TextOptions.TextFormattingMode="Ideal"
+             TextOptions.TextRenderingMode="Auto"
+             Background="{DynamicResource MaterialDesignPaper}"
+             FontFamily="{StaticResource MaterialDesignFont}"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <infr:ViewModelLocator/>
+    </UserControl.DataContext>
+    <DockPanel DataContext="{Binding GoodTabViewModel}">
+        <ctrl:TabToolbar DockPanel.Dock="Top"/>
+        <Grid DockPanel.Dock="Bottom">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <ListBox SelectedItem="{Binding SelectedObj}" ItemsSource="{Binding Objects}" Margin="15">
+                <ListBox.ItemContainerStyle>
+                    <Style BasedOn="{StaticResource MaterialDesignListBoxItem}" TargetType="ListBoxItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <DockPanel>
+                            <Button Content="Delete" Background="Red" DockPanel.Dock="Right" Margin="10"
+                                    Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext.DeleteCommand}"
+                                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}, Path=Content}"/>
+                            <TextBlock Text="{Binding GoodName}" DockPanel.Dock="Left" VerticalAlignment="Center"/>
+                        </DockPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <StackPanel Grid.Column="1" DataContext="{Binding SelectedObj}" Margin="15">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+                         design:HintAssist.Hint="Good Id"
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                         Margin="20 5 20 5"
+                         Text="{Binding GoodId}"
+                         IsReadOnly="True"/>
+                    <TextBox
+                         Grid.Column="1"
+                         design:HintAssist.Hint="Good Title"
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                         Margin="20 5 20 5"
+                         Text="{Binding GoodName, UpdateSourceTrigger=LostFocus}"/>
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+                         design:HintAssist.Hint="Category Id"
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                         Margin="20 5 20 5"
+                         Text="{Binding CategoryId, UpdateSourceTrigger=LostFocus}"/>
+                    <TextBox
+                         Grid.Column="1"
+                         design:HintAssist.Hint="Category Title"
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                         Margin="20 5 20 5"
+                         Text="{Binding CategoryName}"
+                         IsReadOnly="True"/>
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+                        design:HintAssist.Hint="Manufacturer Id"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        Margin="20 5 20 5"
+                        Text="{Binding ManufacturerId, UpdateSourceTrigger=LostFocus}"/>
+                    <TextBox
+                        Grid.Column="1"
+                        design:HintAssist.Hint="Manufacturer Title"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        Margin="20 5 20 5"
+                        Text="{Binding ManufacturerName}"
+                        IsReadOnly="True"/>
+                </Grid>
+                <TextBox
+                    design:HintAssist.Hint="Price"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                    Width="200"
+                    Margin="0 5 0 5"
+                    HorizontalAlignment="Center"
+                    Text="{Binding Price, UpdateSourceTrigger=LostFocus}"/>
+                <TextBox
+                    design:HintAssist.Hint="Good Count"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                    Width="200"
+                    Margin="0 5 0 5"
+                    HorizontalAlignment="Center"
+                    Text="{Binding GoodCount, UpdateSourceTrigger=LostFocus}"/>
+            </StackPanel>
+        </Grid>
+    </DockPanel>
+</UserControl>
